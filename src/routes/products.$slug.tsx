@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { formatPKR } from "@/lib/format";
 import { Minus, Plus, ShoppingBag, MessageCircle } from "lucide-react";
+import { ProductReviews } from "@/components/ProductReviews";
 
 export const Route = createFileRoute("/products/$slug")({
   component: ProductPage,
@@ -99,6 +100,7 @@ function ProductPage() {
           </div>
         </div>
       </div>
+      <ProductReviews productId={product.id} />
     </div>
   );
 }

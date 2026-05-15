@@ -11,7 +11,6 @@ import type { Product } from "@/lib/types";
 import { formatPKR } from "@/lib/format";
 
 const NAV = [
-  { label: "Home", to: "/" },
   { label: "Shop", to: "/shop" },
   { label: "For Her", to: "/shop", search: { category: "women" } },
   { label: "For Him", to: "/shop", search: { category: "men" } },
@@ -24,81 +23,105 @@ export function SiteHeader() {
   const { count } = useCart();
   const { user, isAdmin } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("/images/logo.png");
+  const [siteName, setSiteName] = useState("Z Shaikh");
+
+  useEffect(() => {
+    supabase.from("site_settings").select("value").eq("key", "branding").maybeSingle()
+      .then(({ data }) => {
+        const v = data?.value as { logo_url?: string; site_name?: string } | null;
+        if (v?.logo_url) setLogoUrl(v.logo_url);
+        if (v?.site_name) setSiteName(v.site_name);
+      });
+  }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-40 bg-black text-white">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-3 items-center h-20">
-          {/* Left: hamburger / sider */}
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 h-20">
+          {/* Left: hamburger + search input on desktop */}
           <div className="flex items-center gap-2">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu">
+                <Button variant="ghost" size="icon" aria-label="Open menu" className="text-white hover:bg-white/10 hover:text-white">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[300px] sm:w-[360px] bg-sidebar text-sidebar-foreground border-sidebar-border">
+              <SheetContent side="left" className="w-[300px] sm:w-[360px] bg-black text-white border-white/10">
                 <SheetHeader>
-                  <SheetTitle className="font-display text-2xl text-sidebar-foreground">Menu</SheetTitle>
+                  <SheetTitle className="font-display text-2xl text-white">Menu</SheetTitle>
                 </SheetHeader>
                 <nav className="mt-8 flex flex-col">
+                  <Link to="/" className="px-2 py-3 border-b border-white/10 hover:text-gold">Home</Link>
                   {NAV.map((n) => (
                     <Link
                       key={n.label}
                       to={n.to as any}
                       search={(n as any).search}
-                      className="px-2 py-3 border-b border-sidebar-border hover:text-gold transition-colors text-base tracking-wide"
+                      className="px-2 py-3 border-b border-white/10 hover:text-gold transition-colors"
                     >
                       {n.label}
                     </Link>
                   ))}
-                  <Link to="/cart" className="px-2 py-3 border-b border-sidebar-border hover:text-gold">Cart ({count})</Link>
-                  {isAdmin && <Link to="/admin" className="px-2 py-3 border-b border-sidebar-border text-gold">Dashboard</Link>}
+                  <Link to="/cart" className="px-2 py-3 border-b border-white/10 hover:text-gold">Cart ({count})</Link>
+                  {isAdmin && <Link to="/admin" className="px-2 py-3 border-b border-white/10 text-gold">Dashboard</Link>}
                 </nav>
               </SheetContent>
             </Sheet>
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white/70 rounded-full px-5 py-2.5 w-72 lg:w-80 text-sm transition"
+            >
+              <Search className="h-4 w-4" />
+              <span className="flex-1 text-left">Search</span>
+            </button>
           </div>
 
           {/* Center: logo */}
-          <div className="flex justify-center">
-            <Link to="/" className="flex items-center gap-3">
-              <img src="/images/logo.png" alt="Z Shaikh Perfumes" className="h-12 w-auto" />
-              <span className="hidden md:inline font-display text-xl tracking-[0.2em] uppercase">Z Shaikh</span>
-            </Link>
-          </div>
+          <Link to="/" className="flex items-center justify-center gap-3">
+            <img src={logoUrl} alt={siteName} className="h-10 sm:h-12 w-auto object-contain" />
+            <span className="hidden sm:inline font-display text-xl sm:text-2xl tracking-wide italic text-white">
+              {siteName}
+            </span>
+          </Link>
 
-          {/* Right: search, login, cart */}
+          {/* Right: search (mobile), account, cart */}
           <div className="flex items-center justify-end gap-1">
-            <Button variant="ghost" size="icon" aria-label="Search" onClick={() => setSearchOpen(true)}>
+            <Button variant="ghost" size="icon" aria-label="Search" onClick={() => setSearchOpen(true)} className="md:hidden text-white hover:bg-white/10 hover:text-white">
               <Search className="h-5 w-5" />
             </Button>
-            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"}>
-              <Button variant="ghost" size="icon" aria-label="Account">
+            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} className="hidden sm:flex items-center gap-2 px-3 py-2 hover:text-gold transition">
+              <UserIcon className="h-5 w-5" />
+              <span className="text-xs uppercase tracking-[0.2em]">Account</span>
+            </Link>
+            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} className="sm:hidden">
+              <Button variant="ghost" size="icon" aria-label="Account" className="text-white hover:bg-white/10 hover:text-white">
                 <UserIcon className="h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/cart" className="relative">
-              <Button variant="ghost" size="icon" aria-label="Cart">
+            <Link to="/cart" className="relative flex items-center gap-2 px-3 py-2 hover:text-gold transition">
+              <div className="relative">
                 <ShoppingBag className="h-5 w-5" />
-              </Button>
-              {count > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-gold text-gold-foreground text-[10px] font-medium rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
-                  {count}
-                </span>
-              )}
+                {count > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#e85d3a] text-white text-[10px] font-bold rounded-full h-5 min-w-5 px-1 flex items-center justify-center">
+                    {count}
+                  </span>
+                )}
+              </div>
+              <span className="hidden sm:inline text-xs uppercase tracking-[0.2em]">Cart</span>
             </Link>
           </div>
         </div>
 
-        {/* Desktop secondary nav */}
-        <nav className="hidden lg:flex items-center justify-center gap-8 pb-3 -mt-2">
+        {/* Desktop nav row */}
+        <nav className="hidden lg:flex items-center justify-center gap-10 py-3 border-t border-white/10">
           {NAV.map((n) => (
             <Link
               key={n.label}
               to={n.to as any}
               search={(n as any).search}
-              className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors"
-              activeProps={{ className: "text-foreground" }}
+              className="text-xs uppercase tracking-[0.25em] text-white/80 hover:text-gold transition-colors"
+              activeProps={{ className: "text-gold" }}
             >
               {n.label}
             </Link>
@@ -135,7 +158,7 @@ function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur" role="dialog" aria-label="Search">
+    <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur animate-in fade-in" role="dialog" aria-label="Search">
       <div className="container mx-auto px-4 pt-8">
         <div className="flex items-center gap-2 border-b border-border pb-3">
           <Search className="h-5 w-5 text-muted-foreground" />
