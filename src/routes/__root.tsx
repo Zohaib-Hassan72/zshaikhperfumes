@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { CheckoutSheetProvider } from "@/components/CheckoutSheet";
+import { CartDrawerProvider } from "@/components/CartDrawer";
 import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
 
@@ -94,14 +95,16 @@ function RootComponent() {
       <AuthProvider>
         <CartProvider>
           <CheckoutSheetProvider>
-            <div className="flex flex-col min-h-screen">
-              <PromoBar />
-              <SiteHeader />
-              <main className="flex-1"><Outlet /></main>
-              <SiteFooter />
-            </div>
-            <WhatsAppFab />
-            <Toaster position="top-center" richColors />
+            <CartDrawerProvider>
+              <div className="flex flex-col min-h-screen">
+                <PromoBar />
+                <SiteHeader />
+                <main className="flex-1"><Outlet /></main>
+                <SiteFooter />
+              </div>
+              <WhatsAppFab />
+              <Toaster position="top-center" richColors />
+            </CartDrawerProvider>
           </CheckoutSheetProvider>
         </CartProvider>
       </AuthProvider>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
+import { useCartDrawer } from "@/components/CartDrawer";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
@@ -20,6 +21,7 @@ const NAV = [
 
 export function SiteHeader() {
   const { count } = useCart();
+  const { setOpen: openCart } = useCartDrawer();
   const { user, isAdmin } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState("/images/logo.png");
@@ -61,7 +63,7 @@ export function SiteHeader() {
                       {n.label}
                     </Link>
                   ))}
-                  <Link to="/cart" className="px-2 py-3 border-b border-white/10 hover:text-gold">Cart ({count})</Link>
+                  <button onClick={() => openCart(true)} className="text-left px-2 py-3 border-b border-white/10 hover:text-gold">Cart ({count})</button>
                   {isAdmin && <Link to="/admin" className="px-2 py-3 border-b border-white/10 text-gold">Dashboard</Link>}
                 </nav>
               </SheetContent>
@@ -97,7 +99,7 @@ export function SiteHeader() {
                 <UserIcon className="h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/cart" className="relative flex items-center gap-2 px-3 py-2 hover:text-gold transition">
+            <button onClick={() => openCart(true)} aria-label="Open cart" className="relative flex items-center gap-2 px-3 py-2 hover:text-gold transition">
               <div className="relative">
                 <ShoppingBag className="h-5 w-5" />
                 {count > 0 && (
@@ -107,7 +109,7 @@ export function SiteHeader() {
                 )}
               </div>
               <span className="hidden sm:inline text-xs uppercase tracking-[0.2em]">Cart</span>
-            </Link>
+            </button>
           </div>
         </div>
 
