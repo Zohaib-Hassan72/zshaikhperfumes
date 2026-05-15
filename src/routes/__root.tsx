@@ -8,6 +8,7 @@ import { PromoBar } from "@/components/PromoBar";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
+import { CheckoutSheetProvider } from "@/components/CheckoutSheet";
 import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
 
