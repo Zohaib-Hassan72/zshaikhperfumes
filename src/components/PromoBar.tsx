@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 const DEFAULT_MESSAGES = [
+  "Enjoy Free Shipping on Orders Above Rs. 3000",
   "25% Discount Running on All Orders",
   "Cash on Delivery available all over Pakistan",
 ];
@@ -31,8 +32,8 @@ export function PromoBar() {
   if (!enabled) return null;
 
   return (
-    <div className="bg-primary text-primary-foreground text-xs sm:text-sm tracking-[0.18em] uppercase">
-      <div className="container mx-auto px-4 h-9 flex items-center justify-center text-center overflow-hidden">
+    <div className="bg-black text-white text-xs sm:text-sm font-medium tracking-wide">
+      <div className="container mx-auto px-4 h-10 flex items-center justify-center text-center overflow-hidden">
         <span key={idx} className="animate-in fade-in slide-in-from-bottom-1 duration-500">
           {messages[idx]}
         </span>
