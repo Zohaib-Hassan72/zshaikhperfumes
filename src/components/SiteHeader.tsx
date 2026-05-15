@@ -14,7 +14,6 @@ const NAV = [
   { label: "Shop", to: "/shop" },
   { label: "For Her", to: "/shop", search: { category: "women" } },
   { label: "For Him", to: "/shop", search: { category: "men" } },
-  { label: "Attar", to: "/shop", search: { category: "attar" } },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
