@@ -14,7 +14,6 @@ const NAV = [
   { label: "Shop", to: "/shop" },
   { label: "For Her", to: "/shop", search: { category: "women" } },
   { label: "For Him", to: "/shop", search: { category: "men" } },
-  { label: "Attar", to: "/shop", search: { category: "attar" } },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
@@ -52,7 +51,6 @@ export function SiteHeader() {
                   <SheetTitle className="font-display text-2xl text-white">Menu</SheetTitle>
                 </SheetHeader>
                 <nav className="mt-8 flex flex-col">
-                  <Link to="/" className="px-2 py-3 border-b border-white/10 hover:text-gold">Home</Link>
                   {NAV.map((n) => (
                     <Link
                       key={n.label}

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import { useCheckoutSheet } from "@/components/CheckoutSheet";
 import { formatPKR } from "@/lib/format";
 import { Minus, Plus, X } from "lucide-react";
 
@@ -11,6 +12,7 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, update, remove, subtotal, count } = useCart();
+  const { setOpen } = useCheckoutSheet();
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
@@ -56,9 +58,9 @@ function CartPage() {
               <span className="font-display text-xl">Total</span>
               <span className="font-display text-xl">{formatPKR(subtotal)}</span>
             </div>
-            <Link to="/checkout" className="w-full sm:w-80 mt-4">
-              <Button className="w-full rounded-none uppercase tracking-[0.2em] text-xs py-6">Proceed to Checkout</Button>
-            </Link>
+            <Button onClick={() => setOpen(true)} className="w-full sm:w-80 mt-4 rounded-none uppercase tracking-[0.2em] text-xs py-6">
+              Proceed to Checkout
+            </Button>
           </div>
         </>
       )}

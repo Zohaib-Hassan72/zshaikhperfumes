@@ -8,6 +8,7 @@ import { PromoBar } from "@/components/PromoBar";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
+import { CheckoutSheetProvider } from "@/components/CheckoutSheet";
 import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
 
@@ -92,14 +93,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <div className="flex flex-col min-h-screen">
-            <PromoBar />
-            <SiteHeader />
-            <main className="flex-1"><Outlet /></main>
-            <SiteFooter />
-          </div>
-          <WhatsAppFab />
-          <Toaster position="top-center" richColors />
+          <CheckoutSheetProvider>
+            <div className="flex flex-col min-h-screen">
+              <PromoBar />
+              <SiteHeader />
+              <main className="flex-1"><Outlet /></main>
+              <SiteFooter />
+            </div>
+            <WhatsAppFab />
+            <Toaster position="top-center" richColors />
+          </CheckoutSheetProvider>
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
