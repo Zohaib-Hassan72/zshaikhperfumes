@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import { useCheckoutSheet } from "@/components/CheckoutSheet";
 import { formatPKR } from "@/lib/format";
 import { Minus, Plus, X } from "lucide-react";
 
