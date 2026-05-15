@@ -93,14 +93,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <div className="flex flex-col min-h-screen">
-            <PromoBar />
-            <SiteHeader />
-            <main className="flex-1"><Outlet /></main>
-            <SiteFooter />
-          </div>
-          <WhatsAppFab />
-          <Toaster position="top-center" richColors />
+          <CheckoutSheetProvider>
+            <div className="flex flex-col min-h-screen">
+              <PromoBar />
+              <SiteHeader />
+              <main className="flex-1"><Outlet /></main>
+              <SiteFooter />
+            </div>
+            <WhatsAppFab />
+            <Toaster position="top-center" richColors />
+          </CheckoutSheetProvider>
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
