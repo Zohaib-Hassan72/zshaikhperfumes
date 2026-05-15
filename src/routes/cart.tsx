@@ -12,6 +12,7 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, update, remove, subtotal, count } = useCart();
+  const { setOpen } = useCheckoutSheet();
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
