@@ -83,6 +83,7 @@ export type Database = {
           city: string
           created_at: string
           customer_name: string
+          discount: number
           email: string | null
           id: string
           items: Json
@@ -101,6 +102,7 @@ export type Database = {
           city: string
           created_at?: string
           customer_name: string
+          discount?: number
           email?: string | null
           id?: string
           items?: Json
@@ -119,6 +121,7 @@ export type Database = {
           city?: string
           created_at?: string
           customer_name?: string
+          discount?: number
           email?: string | null
           id?: string
           items?: Json
@@ -238,6 +241,47 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          approved: boolean
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          product_id: string
+          rating: number
+          title: string | null
+        }
+        Insert: {
+          approved?: boolean
+          author_name: string
+          body: string
+          created_at?: string
+          id?: string
+          product_id: string
+          rating: number
+          title?: string | null
+        }
+        Update: {
+          approved?: boolean
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_settings: {
         Row: {
