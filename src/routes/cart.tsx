@@ -58,9 +58,9 @@ function CartPage() {
               <span className="font-display text-xl">Total</span>
               <span className="font-display text-xl">{formatPKR(subtotal)}</span>
             </div>
-            <Link to="/checkout" className="w-full sm:w-80 mt-4">
-              <Button className="w-full rounded-none uppercase tracking-[0.2em] text-xs py-6">Proceed to Checkout</Button>
-            </Link>
+            <Button onClick={() => setOpen(true)} className="w-full sm:w-80 mt-4 rounded-none uppercase tracking-[0.2em] text-xs py-6">
+              Proceed to Checkout
+            </Button>
           </div>
         </>
       )}
