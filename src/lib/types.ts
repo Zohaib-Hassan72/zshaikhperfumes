@@ -50,3 +50,14 @@ export type CartItem = {
 };
 
 export type Settings = Record<string, any>;
+
+export type Review = {
+  id: string;
+  product_id: string;
+  rating: number;
+  title: string | null;
+  body: string;
+  author_name: string;
+  approved: boolean;
+  created_at: string;
+};
