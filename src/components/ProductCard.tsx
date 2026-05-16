@@ -1,45 +1,78 @@
 import { Link } from "@tanstack/react-router";
+import { Heart } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { formatPKR } from "@/lib/format";
+import { useCart } from "@/hooks/use-cart";
+import { useCartDrawer } from "@/components/CartDrawer";
+import { toast } from "sonner";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, collectionLabel }: { product: Product; collectionLabel?: string }) {
+  const { add } = useCart();
+  const { setOpen } = useCartDrawer();
   const onSale = product.sale_price != null && product.sale_price < product.price;
+  const price = product.sale_price ?? product.price;
+  const off = onSale ? Math.round(((product.price - product.sale_price!) / product.price) * 100) : 0;
+  const image = product.images[0] ?? "/images/perfume-1.jpg";
+  const label = collectionLabel ?? (product.category_slug ? `${product.category_slug.toUpperCase()} COLLECTION` : "SIGNATURE COLLECTION");
+
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    add({ product_id: product.id, slug: product.slug, name: product.name, price, image }, 1);
+    toast.success(`${product.name} added to cart`);
+    setOpen(true);
+  };
+
   return (
-    <Link
-      to="/products/$slug"
-      params={{ slug: product.slug }}
-      className="group block"
-    >
-      <div className="relative aspect-[4/5] overflow-hidden bg-muted rounded-sm">
-        <img
-          src={product.images[0] ?? "/images/perfume-1.jpg"}
-          alt={product.name}
-          loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-        {onSale && (
-          <span className="absolute top-3 left-3 bg-gold text-gold-foreground text-[10px] uppercase tracking-[0.15em] px-2 py-1">Sale</span>
-        )}
-        {!product.in_stock && (
-          <span className="absolute top-3 right-3 bg-primary text-primary-foreground text-[10px] uppercase tracking-[0.15em] px-2 py-1">Sold Out</span>
-        )}
-      </div>
-      <div className="mt-4 text-center">
-        <h3 className="font-display text-xl">{product.name}</h3>
-        {product.short_description && (
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{product.short_description}</p>
-        )}
-        <p className="mt-2 text-sm">
-          {onSale ? (
-            <>
-              <span className="text-muted-foreground line-through mr-2">{formatPKR(product.price)}</span>
-              <span className="text-gold font-medium">{formatPKR(product.sale_price!)}</span>
-            </>
-          ) : (
-            <span>{formatPKR(product.price)}</span>
+    <div className="group bg-zinc-950 text-white border border-white/10 hover:border-gold/40 transition-all duration-300 flex flex-col">
+      <Link to="/products/$slug" params={{ slug: product.slug }} className="block">
+        <div className="relative aspect-[4/5] overflow-hidden bg-black">
+          <img
+            src={image}
+            alt={product.name}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          {onSale && (
+            <span className="absolute top-3 left-3 bg-red-600 text-white text-[11px] font-bold px-2 py-1 rounded">
+              -{off}%
+            </span>
           )}
-        </p>
+          {!product.in_stock && (
+            <span className="absolute top-3 left-3 bg-zinc-800 text-white text-[10px] uppercase tracking-[0.15em] px-2 py-1">
+              Sold Out
+            </span>
+          )}
+          <button
+            aria-label="Wishlist"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 backdrop-blur flex items-center justify-center hover:bg-black/70 transition"
+          >
+            <Heart className="h-4 w-4 text-white" />
+          </button>
+        </div>
+      </Link>
+
+      <div className="p-4 flex flex-col flex-1">
+        <Link to="/products/$slug" params={{ slug: product.slug }} className="block flex-1">
+          <p className="text-[10px] tracking-[0.2em] text-gold font-medium">{label}</p>
+          <h3 className="font-display text-2xl mt-1 leading-tight">{product.name}</h3>
+          <p className="mt-2 text-sm flex items-center gap-2">
+            {onSale && <span className="text-white/40 line-through text-xs">{formatPKR(product.price)}</span>}
+            <span className="text-white font-medium">{formatPKR(price)}</span>
+          </p>
+          {product.short_description && (
+            <p className="text-xs text-white/50 mt-1.5 line-clamp-1">{product.short_description}</p>
+          )}
+        </Link>
+        <button
+          onClick={handleAdd}
+          disabled={!product.in_stock}
+          className="mt-4 w-full bg-gold text-black font-semibold uppercase tracking-[0.15em] text-xs py-3.5 hover:bg-gold/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {product.in_stock ? "+ Add to Cart" : "Sold Out"}
+        </button>
       </div>
-    </Link>
+    </div>
   );
 }

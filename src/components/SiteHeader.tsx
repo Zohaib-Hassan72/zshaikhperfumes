@@ -39,18 +39,18 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 bg-black text-white">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 h-20">
-          {/* Left: hamburger + search input on desktop */}
-          <div className="flex items-center gap-2">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 h-16 sm:h-20">
+          {/* Left: hamburger + search */}
+          <div className="flex items-center gap-1 sm:gap-2 justify-start">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu" className="text-white hover:bg-white/10 hover:text-white">
-                  <Menu className="h-5 w-5" />
+                <Button variant="ghost" size="icon" aria-label="Open menu" className="text-white hover:bg-white/15 hover:text-gold">
+                  <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[360px] bg-black text-white border-white/10">
                 <SheetHeader>
-                  <SheetTitle className="font-display text-2xl text-white">Menu</SheetTitle>
+                  <SheetTitle className="font-display text-2xl text-gold">Menu</SheetTitle>
                 </SheetHeader>
                 <nav className="mt-8 flex flex-col">
                   {NAV.map((n) => (
@@ -70,45 +70,35 @@ export function SiteHeader() {
             </Sheet>
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white/70 rounded-full px-5 py-2.5 w-72 lg:w-80 text-sm transition"
+              className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white/80 rounded-full px-5 py-2.5 w-64 lg:w-80 text-sm transition"
             >
               <Search className="h-4 w-4" />
-              <span className="flex-1 text-left">Search</span>
+              <span className="flex-1 text-left">Search fragrances…</span>
             </button>
           </div>
 
-          {/* Center: logo */}
-          <Link to="/" className="flex items-center justify-center gap-3">
-            <img src={logoUrl} alt={siteName} className="h-10 sm:h-12 w-auto object-contain" />
-            <span className="hidden sm:inline font-display text-xl sm:text-2xl tracking-wide italic text-white">
-              {siteName}
-            </span>
+          {/* Center: logo only */}
+          <Link to="/" className="flex items-center justify-center" aria-label={siteName}>
+            <img src={logoUrl} alt={siteName} className="h-10 sm:h-14 w-auto object-contain" />
           </Link>
 
           {/* Right: search (mobile), account, cart */}
-          <div className="flex items-center justify-end gap-1">
-            <Button variant="ghost" size="icon" aria-label="Search" onClick={() => setSearchOpen(true)} className="md:hidden text-white hover:bg-white/10 hover:text-white">
+          <div className="flex items-center justify-end gap-0.5 sm:gap-1">
+            <Button variant="ghost" size="icon" aria-label="Search" onClick={() => setSearchOpen(true)} className="md:hidden text-white hover:bg-white/15 hover:text-gold">
               <Search className="h-5 w-5" />
             </Button>
-            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} className="hidden sm:flex items-center gap-2 px-3 py-2 hover:text-gold transition">
-              <UserIcon className="h-5 w-5" />
-              <span className="text-xs uppercase tracking-[0.2em]">Account</span>
-            </Link>
-            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} className="sm:hidden">
-              <Button variant="ghost" size="icon" aria-label="Account" className="text-white hover:bg-white/10 hover:text-white">
+            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} aria-label="Account">
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/15 hover:text-gold">
                 <UserIcon className="h-5 w-5" />
               </Button>
             </Link>
-            <button onClick={() => openCart(true)} aria-label="Open cart" className="relative flex items-center gap-2 px-3 py-2 hover:text-gold transition">
-              <div className="relative">
-                <ShoppingBag className="h-5 w-5" />
-                {count > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[#e85d3a] text-white text-[10px] font-bold rounded-full h-5 min-w-5 px-1 flex items-center justify-center">
-                    {count}
-                  </span>
-                )}
-              </div>
-              <span className="hidden sm:inline text-xs uppercase tracking-[0.2em]">Cart</span>
+            <button onClick={() => openCart(true)} aria-label="Open cart" className="relative p-2 text-white hover:text-gold transition">
+              <ShoppingBag className="h-5 w-5" />
+              {count > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                  {count}
+                </span>
+              )}
             </button>
           </div>
         </div>
