@@ -32,35 +32,37 @@ function ShopPage() {
   }, [category]);
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold">Shop</p>
-        <h1 className="font-display text-4xl sm:text-5xl mt-3">All Fragrances</h1>
-        <p className="text-muted-foreground mt-3">Explore the full Z Shaikh collection.</p>
-      </div>
+    <div className="bg-black text-white min-h-screen">
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <p className="text-xs uppercase tracking-[0.3em] text-gold">Shop</p>
+          <h1 className="font-display text-4xl sm:text-5xl mt-3">All Fragrances</h1>
+          <p className="text-white/60 mt-3">Explore the full Z Shaikh collection.</p>
+        </div>
 
-      <div className="flex flex-wrap gap-2 justify-center mb-10">
-        <button
-          onClick={() => navigate({ search: {} })}
-          className={`px-4 py-2 text-xs uppercase tracking-[0.18em] border ${!category ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary"}`}
-        >
-          All
-        </button>
-        {categories.map((c) => (
+        <div className="flex flex-wrap gap-2 justify-center mb-10">
           <button
-            key={c.id}
-            onClick={() => navigate({ search: { category: c.slug } })}
-            className={`px-4 py-2 text-xs uppercase tracking-[0.18em] border ${category === c.slug ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary"}`}
+            onClick={() => navigate({ search: {} })}
+            className={`px-4 py-2 text-xs uppercase tracking-[0.18em] border transition ${!category ? "bg-gold text-black border-gold" : "border-white/20 text-white hover:border-gold"}`}
           >
-            {c.name}
+            All
           </button>
-        ))}
-      </div>
+          {categories.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => navigate({ search: { category: c.slug } })}
+              className={`px-4 py-2 text-xs uppercase tracking-[0.18em] border transition ${category === c.slug ? "bg-gold text-black border-gold" : "border-white/20 text-white hover:border-gold"}`}
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
 
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {products.map((p) => <ProductCard key={p.id} product={p} />)}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {products.map((p) => <ProductCard key={p.id} product={p} />)}
+        </div>
+        {products.length === 0 && <p className="text-center text-white/50 py-20">No products in this category yet.</p>}
       </div>
-      {products.length === 0 && <p className="text-center text-muted-foreground py-20">No products in this category yet.</p>}
     </div>
   );
 }
