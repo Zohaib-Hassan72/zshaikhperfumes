@@ -8,8 +8,9 @@ import { useCart } from "@/hooks/use-cart";
 import { useCartDrawer } from "@/components/CartDrawer";
 import { formatPKR } from "@/lib/format";
 import {
-  Minus, Plus, Heart, MessageCircle, Leaf, ShieldCheck, Truck, ChevronDown,
+  Minus, Plus, Heart, Leaf, ShieldCheck, Truck, ChevronDown,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { ProductReviews } from "@/components/ProductReviews";
 
 export const Route = createFileRoute("/products/$slug")({
