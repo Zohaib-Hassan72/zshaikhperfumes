@@ -101,28 +101,28 @@ function ProductPage() {
 
           {/* RIGHT: details */}
           <div className="flex flex-col">
+            {/* 1. Name */}
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight">{product.name}</h1>
 
+            {/* 2. Price */}
             <div className="mt-6 flex items-center flex-wrap gap-3">
-              <span className="text-2xl sm:text-3xl font-medium">{formatPKR(price)}</span>
+              <span className="text-2xl sm:text-3xl font-medium text-gold">{formatPKR(price)}</span>
               {onSale && (
                 <>
                   <span className="text-white/40 line-through">{formatPKR(product.price)}</span>
-                  <span className="bg-emerald-500 text-white text-xs font-bold uppercase px-2.5 py-1 rounded">{off}% OFF</span>
+                  <span className="bg-red-600 text-white text-xs font-bold uppercase px-2.5 py-1 rounded">-{off}%</span>
                 </>
               )}
             </div>
 
-            <div className="mt-8 h-px bg-white/10" />
+            {product.short_description && (
+              <p className="mt-4 text-white/70 leading-relaxed">{product.short_description}</p>
+            )}
 
-            {/* Trust row */}
-            <div className="mt-6 grid grid-cols-3 gap-4 text-xs">
-              <Feature icon={<Leaf className="h-5 w-5" />} title="Finest" sub="Ingredients" />
-              <Feature icon={<ShieldCheck className="h-5 w-5" />} title="100% Authentic" sub="Guaranteed" />
-              <Feature icon={<Truck className="h-5 w-5" />} title="COD" sub="Across Pakistan" />
-            </div>
+            <div className="mt-6 h-px bg-white/10" />
 
-            <div className="mt-8 flex items-center gap-3">
+            {/* 3. Quantity + Add to Cart */}
+            <div className="mt-6 flex items-center gap-3">
               <div className="flex items-center bg-zinc-900 border border-white/10">
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-4 py-3 hover:bg-white/5"><Minus className="h-4 w-4" /></button>
                 <span className="w-12 text-center text-base">{qty}</span>
@@ -143,14 +143,22 @@ function ProductPage() {
               </button>
             </div>
 
+            {/* 4. WhatsApp button */}
             <a
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-center gap-2 w-full bg-[#25D366] text-white py-5 uppercase tracking-[0.25em] text-xs sm:text-sm font-semibold hover:opacity-90 transition"
+              className="mt-4 flex items-center justify-center gap-2 w-full bg-[#25D366] text-white py-5 uppercase tracking-[0.25em] text-xs sm:text-sm font-semibold hover:bg-[#1ebe57] transition"
             >
-              <MessageCircle className="h-5 w-5" /> Order on WhatsApp
+              <WhatsAppIcon className="h-5 w-5" /> Order on WhatsApp
             </a>
+
+            {/* 5. Trust features (BELOW the buttons) */}
+            <div className="mt-8 grid grid-cols-3 gap-4 text-xs">
+              <Feature icon={<Leaf className="h-5 w-5" />} title="Finest" sub="Ingredients" />
+              <Feature icon={<ShieldCheck className="h-5 w-5" />} title="100% Authentic" sub="Guaranteed" />
+              <Feature icon={<Truck className="h-5 w-5" />} title="COD" sub="Across Pakistan" />
+            </div>
 
             {/* Accordions */}
             <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
@@ -180,9 +188,9 @@ function ProductPage() {
         </div>
       </div>
 
-      {/* Reviews on light background */}
-      <div className="bg-background text-foreground">
-        <div className="container mx-auto px-4 py-12">
+      {/* Reviews on dark background */}
+      <div className="bg-black text-white border-t border-white/10">
+        <div className="container mx-auto px-4 py-16">
           <ProductReviews productId={product.id} />
         </div>
       </div>
