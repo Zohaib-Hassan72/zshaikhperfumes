@@ -39,42 +39,60 @@ export function ProductReviews({ productId }: { productId: string }) {
   };
 
   return (
-    <section className="mt-16 border-t border-border pt-12">
-      <h2 className="font-display text-3xl">Customer Reviews</h2>
-      {reviews.length > 0 && (
-        <div className="mt-2 flex items-center gap-2">
-          <Stars value={avg} />
-          <span className="text-sm text-muted-foreground">{avg.toFixed(1)} · {reviews.length} review{reviews.length !== 1 && "s"}</span>
-        </div>
-      )}
+    <section>
+      <div className="text-center">
+        <p className="text-xs uppercase tracking-[0.3em] text-gold">Reviews</p>
+        <h2 className="font-display text-3xl sm:text-4xl mt-2 text-white">Customer Reviews</h2>
+        {reviews.length > 0 && (
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <Stars value={avg} />
+            <span className="text-sm text-white/60">{avg.toFixed(1)} · {reviews.length} review{reviews.length !== 1 && "s"}</span>
+          </div>
+        )}
+      </div>
 
-      <div className="mt-8 grid lg:grid-cols-2 gap-12">
-        <div className="space-y-6">
-          {reviews.length === 0 && <p className="text-muted-foreground text-sm">Be the first to review this fragrance.</p>}
+      <div className="mt-10 grid lg:grid-cols-2 gap-10">
+        <div className="space-y-4">
+          {reviews.length === 0 && (
+            <p className="text-white/50 text-sm text-center py-12 border border-dashed border-white/10">
+              Be the first to review this fragrance.
+            </p>
+          )}
           {reviews.map((r) => (
-            <div key={r.id} className="border-b border-border pb-6 animate-in fade-in slide-in-from-bottom-2">
-              <div className="flex items-center gap-2"><Stars value={r.rating} /><span className="text-sm font-medium">{r.author_name}</span></div>
-              <p className="mt-2 text-sm leading-relaxed">{r.body}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</p>
+            <div key={r.id} className="bg-zinc-950 border border-white/10 hover:border-gold/30 transition p-5 animate-in fade-in slide-in-from-bottom-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-gold/15 text-gold flex items-center justify-center font-display text-lg">
+                    {r.author_name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">{r.author_name}</p>
+                    <p className="text-[11px] text-white/40">{new Date(r.created_at).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <Stars value={r.rating} />
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-white/80">{r.body}</p>
             </div>
           ))}
         </div>
 
-        <form onSubmit={submit} className="bg-secondary/40 p-6 rounded-sm h-fit">
-          <h3 className="font-display text-xl mb-4">Write a review</h3>
-          <Label>Your name</Label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
-          <Label className="mt-3 block">Rating</Label>
+        <form onSubmit={submit} className="bg-zinc-950 border border-gold/30 p-6 h-fit">
+          <h3 className="font-display text-2xl mb-1 text-gold">Write a review</h3>
+          <p className="text-xs text-white/50 mb-4">Share your experience with this fragrance.</p>
+          <Label className="text-white/80">Your name</Label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={100} className="bg-black border-white/15 text-white" />
+          <Label className="mt-3 block text-white/80">Rating</Label>
           <div className="flex gap-1 mt-1">
             {[1, 2, 3, 4, 5].map((i) => (
               <button type="button" key={i} onClick={() => setRating(i)} aria-label={`${i} stars`}>
-                <Star className={`h-6 w-6 ${i <= rating ? "fill-gold text-gold" : "text-muted-foreground"}`} />
+                <Star className={`h-7 w-7 transition-transform hover:scale-110 ${i <= rating ? "fill-gold text-gold" : "text-white/30"}`} />
               </button>
             ))}
           </div>
-          <Label className="mt-3 block">Your review</Label>
-          <Textarea rows={4} value={body} onChange={(e) => setBody(e.target.value)} maxLength={2000} />
-          <Button type="submit" disabled={busy} className="mt-4 rounded-none uppercase tracking-[0.2em] text-xs">
+          <Label className="mt-3 block text-white/80">Your review</Label>
+          <Textarea rows={4} value={body} onChange={(e) => setBody(e.target.value)} maxLength={2000} className="bg-black border-white/15 text-white" />
+          <Button type="submit" disabled={busy} className="mt-4 w-full rounded-none uppercase tracking-[0.2em] text-xs py-6 bg-gold text-black hover:bg-gold/90 font-semibold">
             {busy ? "Submitting…" : "Submit Review"}
           </Button>
         </form>
@@ -87,7 +105,7 @@ function Stars({ value }: { value: number }) {
   return (
     <div className="flex">
       {[1, 2, 3, 4, 5].map((i) => (
-        <Star key={i} className={`h-4 w-4 ${i <= Math.round(value) ? "fill-gold text-gold" : "text-muted-foreground"}`} />
+        <Star key={i} className={`h-4 w-4 ${i <= Math.round(value) ? "fill-gold text-gold" : "text-white/25"}`} />
       ))}
     </div>
   );

@@ -59,22 +59,24 @@ function HomePage() {
         </Link>
       </section>
 
-      {/* Featured 3 products */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">Curated Selection</p>
-          <h2 className="font-display text-4xl sm:text-5xl mt-3">{home.featured_heading ?? "Our Premium Fragrances"}</h2>
-          <p className="text-muted-foreground mt-3">{home.featured_subheading ?? "Three signature scents, hand-picked this season."}</p>
-        </div>
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => <ProductCard key={p.id} product={p} />)}
-        </div>
-        <div className="text-center mt-12">
-          <Link to="/shop">
-            <Button variant="outline" className="border-primary text-primary uppercase tracking-[0.2em] text-xs px-8 py-6 rounded-none">
-              View All Fragrances
-            </Button>
-          </Link>
+      {/* Featured 3 products — dark luxury section */}
+      <section className="bg-black text-white py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs uppercase tracking-[0.3em] text-gold">Curated Selection</p>
+            <h2 className="font-display text-4xl sm:text-5xl mt-3">{home.featured_heading ?? "Our Premium Fragrances"}</h2>
+            <p className="text-white/60 mt-3">{home.featured_subheading ?? "Three signature scents, hand-picked this season."}</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+          </div>
+          <div className="text-center mt-12">
+            <Link to="/shop">
+              <Button variant="outline" className="border-gold text-gold bg-transparent hover:bg-gold hover:text-black uppercase tracking-[0.2em] text-xs px-8 py-6 rounded-none">
+                View All Fragrances
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
