@@ -21,9 +21,9 @@ export function WhatsAppFab({ message }: { message?: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-6 right-6 z-30 h-14 w-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-105 transition-transform"
+      className="fixed bottom-6 right-6 z-30 h-14 w-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-105 hover:bg-[#1ebe57] transition-all"
     >
-      <MessageCircle className="h-7 w-7" />
+      <WhatsAppIcon className="h-7 w-7" />
     </a>
   );
 }
