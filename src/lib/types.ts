@@ -26,6 +26,7 @@ export type Banner = {
   title: string | null;
   subtitle: string | null;
   image_url: string | null;
+  image_url_mobile: string | null;
   link_url: string | null;
   active: boolean;
   sort_order: number;
