@@ -21,7 +21,9 @@ function BannersAdmin() {
     if (!editing) return;
     const payload: any = {
       key: editing.key ?? "hero", title: editing.title ?? null, subtitle: editing.subtitle ?? null,
-      image_url: editing.image_url ?? null, link_url: editing.link_url ?? "/shop",
+      image_url: editing.image_url ?? null,
+      image_url_mobile: editing.image_url_mobile ?? null,
+      link_url: editing.link_url ?? "/shop",
       active: editing.active ?? true, sort_order: Number(editing.sort_order ?? 0),
     };
     const { error } = editing.id
@@ -31,13 +33,25 @@ function BannersAdmin() {
     toast.success("Saved"); setEditing(null); load();
   };
 
+  const uploadImage = async (file: File, field: "image_url" | "image_url_mobile") => {
+    const ext = file.name.split(".").pop();
+    const path = `banners/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, file, { upsert: false });
+    if (error) return toast.error(error.message);
+    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+    setEditing((cur) => ({ ...(cur ?? {}), [field]: data.publicUrl }));
+    toast.success("Uploaded");
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <h1 className="font-display text-3xl">Banners</h1>
         <Button onClick={() => setEditing({ key: "hero", active: true, link_url: "/shop" })} className="rounded-none uppercase text-xs tracking-[0.2em]"><Plus className="h-4 w-4 mr-1" /> New</Button>
       </div>
-      <p className="text-sm text-muted-foreground mt-1">The "hero" banner shows on the homepage. Click the banner on the site to follow its link.</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Banner keys: <b>hero</b> = top of homepage. <b>promo</b> = strip below the free-delivery band. <b>featured</b> = optional banner above featured grid. Each banner supports a desktop image (wide, ~1920×800) and a separate mobile image (portrait, ~800×1000) plus a click-through link.
+          </p>
 
       <div className="mt-6 border border-border divide-y divide-border">
         {items.map((b) => (
@@ -60,14 +74,30 @@ function BannersAdmin() {
             <div className="grid sm:grid-cols-2 gap-3">
               <div><Label>Key</Label>
                 <select className="w-full border border-input bg-background h-9 px-2" value={editing.key ?? "hero"} onChange={(e) => setEditing({ ...editing, key: e.target.value })}>
-                  <option value="hero">Hero (homepage)</option><option value="featured">Featured</option><option value="promo">Promo</option>
+                  <option value="hero">Hero (homepage top)</option>
+                  <option value="promo">Promo (below feature band)</option>
+                  <option value="featured">Featured</option>
                 </select>
               </div>
               <div><Label>Sort order</Label><Input type="number" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} /></div>
               <div className="sm:col-span-2"><Label>Title</Label><Input value={editing.title ?? ""} onChange={(e) => setEditing({ ...editing, title: e.target.value })} /></div>
               <div className="sm:col-span-2"><Label>Subtitle</Label><Input value={editing.subtitle ?? ""} onChange={(e) => setEditing({ ...editing, subtitle: e.target.value })} /></div>
-              <div className="sm:col-span-2"><Label>Image URL</Label><Input value={editing.image_url ?? ""} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} placeholder="/images/hero-banner.jpg" /></div>
-              <div className="sm:col-span-2"><Label>Link URL</Label><Input value={editing.link_url ?? ""} onChange={(e) => setEditing({ ...editing, link_url: e.target.value })} placeholder="/shop" /></div>
+
+              <div className="sm:col-span-2">
+                <Label>Desktop image (wide)</Label>
+                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url"); }} />
+                {editing.image_url && <img src={editing.image_url} alt="" className="mt-2 h-24 object-cover border border-border" />}
+                <Input className="mt-2" value={editing.image_url ?? ""} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} placeholder="Or paste URL" />
+              </div>
+
+              <div className="sm:col-span-2">
+                <Label>Mobile image (portrait)</Label>
+                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url_mobile"); }} />
+                {editing.image_url_mobile && <img src={editing.image_url_mobile} alt="" className="mt-2 h-32 object-cover border border-border" />}
+                <Input className="mt-2" value={editing.image_url_mobile ?? ""} onChange={(e) => setEditing({ ...editing, image_url_mobile: e.target.value })} placeholder="Or paste URL (falls back to desktop image if empty)" />
+              </div>
+
+              <div className="sm:col-span-2"><Label>Link URL (where to go when clicked)</Label><Input value={editing.link_url ?? ""} onChange={(e) => setEditing({ ...editing, link_url: e.target.value })} placeholder="/shop or https://…" /></div>
               <div className="flex items-end"><label className="flex items-center gap-2"><input type="checkbox" checked={editing.active ?? true} onChange={(e) => setEditing({ ...editing, active: e.target.checked })} /> Active</label></div>
             </div>
             <div className="mt-5 flex gap-2 justify-end">
