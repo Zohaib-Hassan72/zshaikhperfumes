@@ -83,15 +83,15 @@ function ProductPage() {
 
       <div className="container mx-auto px-4 pb-16">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* LEFT: thumbnails + main image */}
-          <div className="flex gap-3 lg:gap-4">
-            {/* Thumbnails */}
-            <div className="flex flex-col gap-3 w-16 sm:w-20 shrink-0">
+          {/* LEFT: image + thumbnails (responsive) */}
+          <div className="flex flex-col-reverse sm:flex-row gap-3 lg:gap-4">
+            {/* Thumbnails: horizontal on mobile, vertical on sm+ */}
+            <div className="flex sm:flex-col gap-2 sm:gap-3 sm:w-20 shrink-0 overflow-x-auto sm:overflow-visible">
               {images.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`aspect-square overflow-hidden border-2 transition ${activeImage === i ? "border-gold" : "border-white/10 hover:border-white/40"}`}
+                  className={`aspect-square w-16 sm:w-full shrink-0 overflow-hidden border-2 transition ${activeImage === i ? "border-gold" : "border-white/10 hover:border-white/40"}`}
                   aria-label={`View image ${i + 1}`}
                 >
                   <img src={img} alt="" className="w-full h-full object-cover" />
@@ -146,10 +146,11 @@ function ProductPage() {
                 + {product.in_stock ? "Add to Cart" : "Sold Out"}
               </Button>
               <button
-                aria-label="Add to wishlist"
+                aria-label={hasWish(product.id) ? "Remove from wishlist" : "Add to wishlist"}
+                onClick={() => toggleWish(product.id)}
                 className="w-12 h-12 sm:w-14 sm:h-14 border border-gold/60 flex items-center justify-center hover:bg-gold/10 transition"
               >
-                <Heart className="h-5 w-5 text-rose-500 fill-rose-500" />
+                <Heart className={`h-5 w-5 transition-all ${hasWish(product.id) ? "text-red-500 fill-red-500 scale-110" : "text-white/70"}`} />
               </button>
             </div>
 
@@ -204,6 +205,21 @@ function ProductPage() {
           <ProductReviews productId={product.id} />
         </div>
       </div>
+
+      {/* Featured / Related products */}
+      {related.length > 0 && (
+        <section className="bg-black text-white border-t border-white/10 py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10">
+              <p className="text-xs uppercase tracking-[0.3em] text-gold">You may also love</p>
+              <h2 className="font-display text-3xl sm:text-4xl mt-2">Featured Fragrances</h2>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {related.map((p) => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
