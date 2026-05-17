@@ -6,12 +6,14 @@ import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { useCartDrawer } from "@/components/CartDrawer";
+import { useWishlist } from "@/hooks/use-wishlist";
 import { formatPKR } from "@/lib/format";
 import {
   Minus, Plus, Heart, Leaf, ShieldCheck, Truck, ChevronDown,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { ProductReviews } from "@/components/ProductReviews";
+import { ProductCard } from "@/components/ProductCard";
 
 export const Route = createFileRoute("/products/$slug")({
   component: ProductPage,
@@ -33,12 +35,20 @@ function ProductPage() {
   const [openSection, setOpenSection] = useState<string | null>("shipping");
   const { add } = useCart();
   const { setOpen: openCart } = useCartDrawer();
+  const { has: hasWish, toggle: toggleWish } = useWishlist();
+  const [related, setRelated] = useState<Product[]>([]);
 
   useEffect(() => {
     setLoading(true);
     setActiveImage(0);
     supabase.from("products").select("*").eq("slug", slug).maybeSingle()
-      .then(({ data }) => { setProduct(data as Product | null); setLoading(false); });
+      .then(({ data }) => {
+        setProduct(data as Product | null); setLoading(false);
+        if (data) {
+          supabase.from("products").select("*").neq("id", (data as Product).id).order("featured", { ascending: false }).order("sort_order").limit(4)
+            .then(({ data: rel }) => setRelated((rel ?? []) as Product[]));
+        }
+      });
     supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle()
       .then(({ data }) => {
         const v = data?.value as { whatsapp?: string } | null;
