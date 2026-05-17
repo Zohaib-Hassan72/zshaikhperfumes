@@ -24,6 +24,7 @@ export function SiteHeader() {
   const { setOpen: openCart } = useCartDrawer();
   const { user, isAdmin } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState("/images/logo.png");
   const [siteName, setSiteName] = useState("Z Shaikh");
 
@@ -42,11 +43,18 @@ export function SiteHeader() {
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 h-16 sm:h-20">
           {/* Left: hamburger + search */}
           <div className="flex items-center gap-1 sm:gap-2 justify-start">
-            <Sheet>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu" className="text-white hover:bg-white/15 hover:text-gold">
-                  <Menu className="h-6 w-6" />
-                </Button>
+                <button
+                  aria-label={menuOpen ? "Close menu" : "Open menu"}
+                  className="relative w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center text-white hover:text-gold transition-colors"
+                >
+                  <span className="relative w-7 h-5 sm:w-8 sm:h-6 block">
+                    <span className={`absolute left-0 right-0 h-[2px] bg-current transition-all duration-300 ${menuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"}`} />
+                    <span className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-current transition-all duration-200 ${menuOpen ? "opacity-0" : "opacity-100"}`} />
+                    <span className={`absolute left-0 right-0 h-[2px] bg-current transition-all duration-300 ${menuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-0"}`} />
+                  </span>
+                </button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[360px] bg-black text-white border-white/10">
                 <SheetHeader>
@@ -58,44 +66,43 @@ export function SiteHeader() {
                       key={n.label}
                       to={n.to as any}
                       search={(n as any).search}
+                      onClick={() => setMenuOpen(false)}
                       className="px-2 py-3 border-b border-white/10 hover:text-gold transition-colors"
                     >
                       {n.label}
                     </Link>
                   ))}
-                  <button onClick={() => openCart(true)} className="text-left px-2 py-3 border-b border-white/10 hover:text-gold">Cart ({count})</button>
-                  {isAdmin && <Link to="/admin" className="px-2 py-3 border-b border-white/10 text-gold">Dashboard</Link>}
+                  <button onClick={() => { setMenuOpen(false); openCart(true); }} className="text-left px-2 py-3 border-b border-white/10 hover:text-gold">Cart ({count})</button>
+                  {isAdmin && <Link to="/admin" onClick={() => setMenuOpen(false)} className="px-2 py-3 border-b border-white/10 text-gold">Dashboard</Link>}
                 </nav>
               </SheetContent>
             </Sheet>
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white/80 rounded-full px-5 py-2.5 w-64 lg:w-80 text-sm transition"
+              className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white/80 rounded-full px-5 py-3 w-64 lg:w-80 text-sm transition"
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-5 w-5" />
               <span className="flex-1 text-left">Search fragrances…</span>
             </button>
           </div>
 
           {/* Center: logo only */}
           <Link to="/" className="flex items-center justify-center" aria-label={siteName}>
-            <img src={logoUrl} alt={siteName} className="h-10 sm:h-14 w-auto object-contain" />
+            <img src={logoUrl} alt={siteName} className="h-12 sm:h-16 w-auto object-contain" />
           </Link>
 
-          {/* Right: search (mobile), account, cart */}
-          <div className="flex items-center justify-end gap-0.5 sm:gap-1">
-            <Button variant="ghost" size="icon" aria-label="Search" onClick={() => setSearchOpen(true)} className="md:hidden text-white hover:bg-white/15 hover:text-gold">
-              <Search className="h-5 w-5" />
-            </Button>
-            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} aria-label="Account">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/15 hover:text-gold">
-                <UserIcon className="h-5 w-5" />
-              </Button>
+          {/* Right */}
+          <div className="flex items-center justify-end gap-1 sm:gap-1.5">
+            <button aria-label="Search" onClick={() => setSearchOpen(true)} className="md:hidden w-11 h-11 flex items-center justify-center text-white hover:text-gold transition">
+              <Search className="h-6 w-6" />
+            </button>
+            <Link to={user ? (isAdmin ? "/admin" : "/account") : "/login"} aria-label="Account" className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center text-white hover:text-gold transition">
+              <UserIcon className="h-6 w-6" />
             </Link>
-            <button onClick={() => openCart(true)} aria-label="Open cart" className="relative p-2 text-white hover:text-gold transition">
-              <ShoppingBag className="h-5 w-5" />
+            <button onClick={() => openCart(true)} aria-label="Open cart" className="relative w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center text-white hover:text-gold transition">
+              <ShoppingBag className="h-6 w-6" />
               {count > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                <span className="absolute top-1 right-1 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
                   {count}
                 </span>
               )}
