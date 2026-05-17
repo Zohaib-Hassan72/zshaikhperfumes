@@ -173,6 +173,15 @@ function CheckoutSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (v
                     </div>
                   </button>
                 </div>
+                {payment === "easypaisa" && (
+                  <div className="mt-3 border border-gold/40 bg-gold/5 p-4 text-sm space-y-1 animate-in fade-in slide-in-from-top-1 duration-300">
+                    <p className="text-gold font-semibold uppercase tracking-[0.15em] text-xs mb-2">Send payment to:</p>
+                    <p className="flex justify-between"><span className="text-white/60">Account No</span><span className="font-mono text-white">03126056141</span></p>
+                    <p className="flex justify-between"><span className="text-white/60">Name</span><span className="text-white">Zohaib Hassan</span></p>
+                    <p className="flex justify-between"><span className="text-white/60">Bank</span><span className="text-white">Easypaisa / Jazz Cash</span></p>
+                    <p className="text-[11px] text-white/50 mt-2 pt-2 border-t border-white/10">After paying, share the screenshot via WhatsApp to confirm your order.</p>
+                  </div>
+                )}
               </div>
 
               {/* WhatsApp copy checkbox */}
