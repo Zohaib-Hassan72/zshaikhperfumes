@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          image_url_mobile: string | null
           key: string
           link_url: string | null
           sort_order: number
@@ -32,6 +33,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          image_url_mobile?: string | null
           key: string
           link_url?: string | null
           sort_order?: number
@@ -44,6 +46,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          image_url_mobile?: string | null
           key?: string
           link_url?: string | null
           sort_order?: number

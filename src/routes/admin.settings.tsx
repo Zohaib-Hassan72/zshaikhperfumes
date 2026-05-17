@@ -66,9 +66,11 @@ function SettingsAdmin() {
       </section>
 
       <section>
-        <h2 className="font-display text-xl mb-3">Homepage section</h2>
-        <Label>Featured heading</Label><Input value={home.featured_heading ?? ""} onChange={(e) => setHome({ ...home, featured_heading: e.target.value })} />
-        <Label className="mt-3 block">Featured subheading</Label><Input value={home.featured_subheading ?? ""} onChange={(e) => setHome({ ...home, featured_subheading: e.target.value })} />
+        <h2 className="font-display text-xl mb-3">Homepage text</h2>
+        <p className="text-xs text-muted-foreground mb-3">Banners (hero + promo + featured) are managed in the <b>Banners</b> tab. Categories shown on the home page come from the <b>Categories</b> table. Featured products are products marked "featured" in <b>Products</b>.</p>
+        <Label>Categories section heading</Label><Input value={home.categories_heading ?? ""} onChange={(e) => setHome({ ...home, categories_heading: e.target.value })} placeholder="Shop by Collection" />
+        <Label className="mt-3 block">Featured section heading</Label><Input value={home.featured_heading ?? ""} onChange={(e) => setHome({ ...home, featured_heading: e.target.value })} />
+        <Label className="mt-3 block">Featured section subheading</Label><Input value={home.featured_subheading ?? ""} onChange={(e) => setHome({ ...home, featured_subheading: e.target.value })} />
       </section>
 
       <section className="grid sm:grid-cols-2 gap-3">

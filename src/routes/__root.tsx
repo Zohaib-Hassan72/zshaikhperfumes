@@ -10,6 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { CheckoutSheetProvider } from "@/components/CheckoutSheet";
 import { CartDrawerProvider } from "@/components/CartDrawer";
+import { WishlistProvider } from "@/hooks/use-wishlist";
 import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
 
@@ -94,6 +95,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
+         <WishlistProvider>
           <CheckoutSheetProvider>
             <CartDrawerProvider>
               <div className="flex flex-col min-h-screen">
@@ -106,6 +108,7 @@ function RootComponent() {
               <Toaster position="top-center" richColors />
             </CartDrawerProvider>
           </CheckoutSheetProvider>
+         </WishlistProvider>
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>

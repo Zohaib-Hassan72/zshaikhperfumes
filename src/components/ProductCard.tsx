@@ -4,11 +4,14 @@ import type { Product } from "@/lib/types";
 import { formatPKR } from "@/lib/format";
 import { useCart } from "@/hooks/use-cart";
 import { useCartDrawer } from "@/components/CartDrawer";
+import { useWishlist } from "@/hooks/use-wishlist";
 import { toast } from "sonner";
 
 export function ProductCard({ product, collectionLabel }: { product: Product; collectionLabel?: string }) {
   const { add } = useCart();
   const { setOpen } = useCartDrawer();
+  const { has, toggle } = useWishlist();
+  const wished = has(product.id);
   const onSale = product.sale_price != null && product.sale_price < product.price;
   const price = product.sale_price ?? product.price;
   const off = onSale ? Math.round(((product.price - product.sale_price!) / product.price) * 100) : 0;
@@ -44,11 +47,11 @@ export function ProductCard({ product, collectionLabel }: { product: Product; co
             </span>
           )}
           <button
-            aria-label="Wishlist"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 backdrop-blur flex items-center justify-center hover:bg-black/70 transition"
+            aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(product.id); toast.success(wished ? "Removed from wishlist" : "Added to wishlist"); }}
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 backdrop-blur flex items-center justify-center hover:bg-black/80 transition"
           >
-            <Heart className="h-4 w-4 text-white" />
+            <Heart className={`h-4 w-4 transition-all ${wished ? "text-red-500 fill-red-500 scale-110" : "text-white"}`} />
           </button>
         </div>
       </Link>
