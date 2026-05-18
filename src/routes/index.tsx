@@ -76,44 +76,30 @@ function HomePage() {
         </Link>
       </section>
 
-      {/* Brand promise band */}
-      <section className="bg-black border-y border-white/10">
-        <div className="container mx-auto px-4 py-10 grid gap-6 sm:grid-cols-3 text-center">
-          {[
-            { t: "Free Delivery", s: "All orders, all over Pakistan" },
-            { t: "Cash on Delivery", s: "Pay when your scent arrives" },
-            { t: "7-Day Returns", s: "Unopened bottles, full refund" },
-          ].map((b) => (
-            <div key={b.t}>
-              <h3 className="font-display text-xl text-gold">{b.t}</h3>
-              <p className="text-sm text-white/60 mt-1">{b.s}</p>
-            </div>
-          ))}
+      {/* Featured products (right after header/hero) */}
+      <section className="bg-black text-white py-16 sm:py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+            <p className="text-xs uppercase tracking-[0.3em] text-gold">Curated Selection</p>
+            <h2 className="font-display text-4xl sm:text-5xl mt-3">{home.featured_heading ?? "Our Premium Fragrances"}</h2>
+            <p className="text-white/60 mt-3">{home.featured_subheading ?? "Signature scents, hand-picked this season."}</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+          </div>
+          <div className="text-center mt-10">
+            <Link to="/shop">
+              <Button variant="outline" className="border-gold text-gold bg-transparent hover:bg-gold hover:text-black uppercase tracking-[0.2em] text-xs px-8 py-6 rounded-none">
+                View All Fragrances
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Editable promo banner (after free-delivery band) */}
-      {promo && (
-        <section className="bg-black">
-          <Link to={promo.link_url ?? "/shop"} aria-label={promo.title ?? "Promo"} className="block group overflow-hidden">
-            <div className="relative">
-              <BannerImg b={promo} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
-              {(promo.title || promo.subtitle) && (
-                <div className="absolute inset-0 flex items-center">
-                  <div className="container mx-auto px-6 text-white">
-                    {promo.title && <h2 className="font-display text-2xl sm:text-4xl md:text-5xl max-w-2xl">{promo.title}</h2>}
-                    {promo.subtitle && <p className="mt-2 max-w-xl text-sm sm:text-base text-white/80">{promo.subtitle}</p>}
-                  </div>
-                </div>
-              )}
-            </div>
-          </Link>
-        </section>
-      )}
-
-      {/* Categories */}
+      {/* Collections / Categories */}
       {categories.length > 0 && (
-        <section className="bg-black text-white py-16">
+        <section className="bg-black text-white py-16 border-t border-white/10">
           <div className="container mx-auto px-4">
             <div className="text-center mb-10">
               <p className="text-xs uppercase tracking-[0.3em] text-gold">Explore</p>
@@ -145,26 +131,42 @@ function HomePage() {
         </section>
       )}
 
-      {/* Featured products */}
-      <section className="bg-black text-white py-20 border-t border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <p className="text-xs uppercase tracking-[0.3em] text-gold">Curated Selection</p>
-            <h2 className="font-display text-4xl sm:text-5xl mt-3">{home.featured_heading ?? "Our Premium Fragrances"}</h2>
-            <p className="text-white/60 mt-3">{home.featured_subheading ?? "Signature scents, hand-picked this season."}</p>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((p) => <ProductCard key={p.id} product={p} />)}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/shop">
-              <Button variant="outline" className="border-gold text-gold bg-transparent hover:bg-gold hover:text-black uppercase tracking-[0.2em] text-xs px-8 py-6 rounded-none">
-                View All Fragrances
-              </Button>
-            </Link>
-          </div>
+      {/* Brand promise band */}
+      <section className="bg-black border-y border-white/10">
+        <div className="container mx-auto px-4 py-10 grid gap-6 sm:grid-cols-3 text-center">
+          {[
+            { t: "Free Delivery", s: "All orders, all over Pakistan" },
+            { t: "Cash on Delivery", s: "Pay when your scent arrives" },
+            { t: "7-Day Returns", s: "Unopened bottles, full refund" },
+          ].map((b) => (
+            <div key={b.t}>
+              <h3 className="font-display text-xl text-gold">{b.t}</h3>
+              <p className="text-sm text-white/60 mt-1">{b.s}</p>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* Editable secondary banner — slimmer than the hero */}
+      {promo && (
+        <section className="bg-black">
+          <Link to={promo.link_url ?? "/shop"} aria-label={promo.title ?? "Promo"} className="block group overflow-hidden">
+            <div className="relative h-[28vh] sm:h-[36vh] md:h-[40vh]">
+              <BannerImg b={promo} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+              {(promo.title || promo.subtitle) && (
+                <div className="absolute inset-0 flex items-center">
+                  <div className="container mx-auto px-6 text-white">
+                    {promo.title && <h2 className="font-display text-2xl sm:text-3xl md:text-4xl max-w-2xl">{promo.title}</h2>}
+                    {promo.subtitle && <p className="mt-2 max-w-xl text-sm sm:text-base text-white/80">{promo.subtitle}</p>}
+                    <span className="inline-block mt-4 border border-gold text-gold px-6 py-2 text-[11px] uppercase tracking-[0.25em] group-hover:bg-gold group-hover:text-black transition-colors">Shop now</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Link>
+        </section>
+      )}
 
       {/* Story */}
       <section className="bg-black text-white border-t border-white/10">

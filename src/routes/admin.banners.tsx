@@ -33,14 +33,16 @@ function BannersAdmin() {
     toast.success("Saved"); setEditing(null); load();
   };
 
-  const uploadImage = async (file: File, field: "image_url" | "image_url_mobile") => {
-    const ext = file.name.split(".").pop();
+  const uploadImage = async (file: File, field: "image_url" | "image_url_mobile", inputEl?: HTMLInputElement | null) => {
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
     const path = `banners/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file, { upsert: false });
-    if (error) return toast.error(error.message);
+    const tId = toast.loading("Uploading…");
+    const { error } = await supabase.storage.from("product-images").upload(path, file, { upsert: false, contentType: file.type });
+    if (error) { toast.error(error.message, { id: tId }); if (inputEl) inputEl.value = ""; return; }
     const { data } = supabase.storage.from("product-images").getPublicUrl(path);
     setEditing((cur) => ({ ...(cur ?? {}), [field]: data.publicUrl }));
-    toast.success("Uploaded");
+    toast.success("Uploaded", { id: tId });
+    if (inputEl) inputEl.value = "";
   };
 
   return (
@@ -85,14 +87,14 @@ function BannersAdmin() {
 
               <div className="sm:col-span-2">
                 <Label>Desktop image (wide)</Label>
-                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url"); }} />
+                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url", e.target); }} />
                 {editing.image_url && <img src={editing.image_url} alt="" className="mt-2 h-24 object-cover border border-border" />}
                 <Input className="mt-2" value={editing.image_url ?? ""} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} placeholder="Or paste URL" />
               </div>
 
               <div className="sm:col-span-2">
                 <Label>Mobile image (portrait)</Label>
-                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url_mobile"); }} />
+                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url_mobile", e.target); }} />
                 {editing.image_url_mobile && <img src={editing.image_url_mobile} alt="" className="mt-2 h-32 object-cover border border-border" />}
                 <Input className="mt-2" value={editing.image_url_mobile ?? ""} onChange={(e) => setEditing({ ...editing, image_url_mobile: e.target.value })} placeholder="Or paste URL (falls back to desktop image if empty)" />
               </div>
