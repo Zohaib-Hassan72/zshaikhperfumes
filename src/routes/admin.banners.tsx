@@ -94,7 +94,7 @@ function BannersAdmin() {
 
               <div className="sm:col-span-2">
                 <Label>Mobile image (portrait)</Label>
-                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url_mobile"); }} />
+                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url_mobile", e.target); }} />
                 {editing.image_url_mobile && <img src={editing.image_url_mobile} alt="" className="mt-2 h-32 object-cover border border-border" />}
                 <Input className="mt-2" value={editing.image_url_mobile ?? ""} onChange={(e) => setEditing({ ...editing, image_url_mobile: e.target.value })} placeholder="Or paste URL (falls back to desktop image if empty)" />
               </div>
