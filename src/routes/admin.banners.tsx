@@ -87,7 +87,7 @@ function BannersAdmin() {
 
               <div className="sm:col-span-2">
                 <Label>Desktop image (wide)</Label>
-                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url"); }} />
+                <Input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f, "image_url", e.target); }} />
                 {editing.image_url && <img src={editing.image_url} alt="" className="mt-2 h-24 object-cover border border-border" />}
                 <Input className="mt-2" value={editing.image_url ?? ""} onChange={(e) => setEditing({ ...editing, image_url: e.target.value })} placeholder="Or paste URL" />
               </div>
