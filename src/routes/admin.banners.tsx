@@ -33,14 +33,16 @@ function BannersAdmin() {
     toast.success("Saved"); setEditing(null); load();
   };
 
-  const uploadImage = async (file: File, field: "image_url" | "image_url_mobile") => {
-    const ext = file.name.split(".").pop();
+  const uploadImage = async (file: File, field: "image_url" | "image_url_mobile", inputEl?: HTMLInputElement | null) => {
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
     const path = `banners/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file, { upsert: false });
-    if (error) return toast.error(error.message);
+    const tId = toast.loading("Uploading…");
+    const { error } = await supabase.storage.from("product-images").upload(path, file, { upsert: false, contentType: file.type });
+    if (error) { toast.error(error.message, { id: tId }); if (inputEl) inputEl.value = ""; return; }
     const { data } = supabase.storage.from("product-images").getPublicUrl(path);
     setEditing((cur) => ({ ...(cur ?? {}), [field]: data.publicUrl }));
-    toast.success("Uploaded");
+    toast.success("Uploaded", { id: tId });
+    if (inputEl) inputEl.value = "";
   };
 
   return (
