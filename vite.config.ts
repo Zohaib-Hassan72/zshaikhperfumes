@@ -19,6 +19,9 @@ export default defineConfig(
         tanstackStart: {
           server: { entry: "server" },
         },
+        build: {
+          ssr: "src/server.ts",
+        },
       }
     : {},
 );
