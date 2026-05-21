@@ -11,17 +11,15 @@ import { nitro } from "nitro/vite";
 // (dist/), so we must NOT disable cloudflare or inject nitro there.
 const isVercel = !!process.env.VERCEL;
 
-export default defineConfig(
-  isVercel
-    ? {
-        cloudflare: false,
-        plugins: [nitro({ preset: "vercel" })],
-        tanstackStart: {
-          server: { entry: "server" },
-        },
-        build: {
-          ssr: "src/server.ts",
-        },
-      }
-    : {},
-);
+export default defineConfig({
+  ...((isVercel && {
+    cloudflare: false,
+    plugins: [nitro({ preset: "vercel" })],
+    tanstackStart: {
+      server: { entry: "server" },
+    },
+  }) ?? {}),
+  build: {
+    ssr: "src/server.ts",
+  },
+});
