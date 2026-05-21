@@ -16,10 +16,15 @@ export default defineConfig({
     cloudflare: false,
     plugins: [nitro({ preset: "vercel" })],
     tanstackStart: {
-      server: { entry: "server" },
+      server: { entry: "src/server.ts" },
     },
   }) ?? {}),
   build: {
     ssr: "src/server.ts",
+    rollupOptions: {
+      input: {
+        server: "src/server.ts",
+      },
+    },
   },
 });
