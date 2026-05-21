@@ -1,0 +1,16 @@
+.git
+.gitignore
+.env.local
+.env.*.local
+node_modules
+bun.lock
+.lovable
+.prettierrc
+eslint.config.js
+tsconfig.json
+vite.config.ts
+src
+supabase
+public/images
+DEPLOY_VERCEL.md
+README.md
